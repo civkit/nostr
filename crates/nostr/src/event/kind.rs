@@ -94,6 +94,8 @@ pub enum Kind {
     Ephemeral(u16),
     /// Parameterized Replacabe event (must be between 30000 and <40000)
     ParameterizedReplaceable(u16),
+    /// Order note (NIPXXX)
+    Order,
     /// Custom
     Custom(u64),
 }
@@ -149,6 +151,7 @@ impl From<u64> for Kind {
             30009 => Self::BadgeDefinition,
             30023 => Self::LongFormTextNote,
             30078 => Self::ApplicationSpecificData,
+	    32500 => Self::Order,
             x if (1_000..10_000).contains(&x) => Self::Regular(x as u16),
             x if (10_000..20_000).contains(&x) => Self::Replaceable(x as u16),
             x if (20_000..30_000).contains(&x) => Self::Ephemeral(x as u16),
@@ -197,6 +200,7 @@ impl From<Kind> for u64 {
             Kind::BadgeDefinition => 30009,
             Kind::LongFormTextNote => 30023,
             Kind::ApplicationSpecificData => 30078,
+	    Kind::Order => 32500,
             Kind::Regular(u) => u as u64,
             Kind::Replaceable(u) => u as u64,
             Kind::Ephemeral(u) => u as u64,

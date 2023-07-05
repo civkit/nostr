@@ -217,6 +217,14 @@ impl EventBuilder {
         Self::new(Kind::TextNote, content, tags)
     }
 
+    /// Order note
+    pub fn new_order_note<S>(content: S, tags: &[Tag]) -> Self
+    where
+	S: Into<String>,
+    {
+	Self::new(Kind::Order, content, tags)
+    }
+
     /// Long-form text note (generally referred to as "articles" or "blog posts").
     ///
     /// <https://github.com/nostr-protocol/nips/blob/master/23.md>
