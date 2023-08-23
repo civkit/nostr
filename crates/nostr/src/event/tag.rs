@@ -247,6 +247,8 @@ pub enum TagKind {
     Lnurl,
     /// Name tag
     Name,
+    /// Credential
+    Credential,
     /// Custom tag kind
     Custom(String),
 }
@@ -281,6 +283,7 @@ impl fmt::Display for TagKind {
             Self::Amount => write!(f, "amount"),
             Self::Lnurl => write!(f, "lnurl"),
             Self::Name => write!(f, "name"),
+            Self::Credential => write!(f, "credential"),
             Self::Custom(tag) => write!(f, "{tag}"),
         }
     }
@@ -320,6 +323,7 @@ where
             "amount" => Self::Amount,
             "lnurl" => Self::Lnurl,
             "name" => Self::Name,
+	    "credential" => Self::Credential,
             tag => Self::Custom(tag.to_string()),
         }
     }
@@ -377,6 +381,7 @@ pub enum Tag {
     Amount(u64),
     Lnurl(String),
     Name(String),
+    Credential(Vec<u8>),
     PublishedAt(Timestamp),
 }
 
@@ -428,6 +433,7 @@ impl Tag {
             Tag::Relays(..) => TagKind::Relays,
             Tag::Amount(..) => TagKind::Amount,
             Tag::Name(..) => TagKind::Name,
+	    Tag::Credential(..) => TagKind::Credential,
             Tag::Lnurl(..) => TagKind::Lnurl,
         }
     }
@@ -501,6 +507,7 @@ where
                 TagKind::Amount => Ok(Self::Amount(content.parse()?)),
                 TagKind::Lnurl => Ok(Self::Lnurl(content.to_string())),
                 TagKind::Name => Ok(Self::Name(content.to_string())),
+		TagKind::Credential => Ok(Self::Credential(content.as_bytes().to_vec())),
                 _ => Ok(Self::Generic(tag_kind, vec![content.to_string()])),
             }
         } else if tag_len == 3 {
@@ -734,6 +741,10 @@ impl From<Tag> for Vec<String> {
             Tag::Name(name) => {
                 vec![TagKind::Name.to_string(), name]
             }
+	    Tag::Credential(_) => {
+		//TODO: implement string format, nostr sucks.
+		vec![TagKind::Credential.to_string()]
+	    }
             Tag::Lnurl(lnurl) => {
                 vec![TagKind::Lnurl.to_string(), lnurl]
             }

@@ -56,6 +56,14 @@ pub enum Kind {
     WalletConnectInfo,
     /// Reporting (NIP56)
     Reporting,
+    /// Staking Credentials Credential Authentication Request
+    CredentialAuthenticationRequest,
+    /// Staking Credentials Credential Authentication Result
+    CredentialAuthenticationResult,
+    /// Staking Credentials Service Deliverance Request
+    ServiceDeliveranceRequest,
+    /// Staking Credentials Service Deliverance Result
+    ServiceDeliveranceResult,
     /// Zap Request (NIP57)
     ZapRequest,
     /// Zap (NIP57)
@@ -136,6 +144,10 @@ impl From<u64> for Kind {
             49 => Self::PublicChatReserved49,
             13194 => Self::WalletConnectInfo,
             1984 => Self::Reporting,
+	    3250 => Self::CredentialAuthenticationRequest,
+	    3251 => Self::CredentialAuthenticationResult,
+	    3252 => Self::ServiceDeliveranceRequest,
+	    3253 => Self::ServiceDeliveranceResult,
             9734 => Self::ZapRequest,
             9735 => Self::Zap,
             10000 => Self::MuteList,
@@ -185,6 +197,10 @@ impl From<Kind> for u64 {
             Kind::PublicChatReserved49 => 49,
             Kind::WalletConnectInfo => 13194,
             Kind::Reporting => 1984,
+	    Kind::CredentialAuthenticationRequest => 3250,
+	    Kind::CredentialAuthenticationResult => 3251,
+	    Kind::ServiceDeliveranceRequest => 3252,
+	    Kind::ServiceDeliveranceResult => 3253,
             Kind::ZapRequest => 9734,
             Kind::Zap => 9735,
             Kind::MuteList => 10000,

@@ -225,6 +225,38 @@ impl EventBuilder {
 	Self::new(Kind::Order, content, tags)
     }
 
+    /// Credential Authentication Request
+    pub fn new_credential_authentication_request<S>(content: S, tags: &[Tag]) -> Self
+    where
+        S: Into<String>,
+    {
+        Self::new(Kind::CredentialAuthenticationRequest, content, tags)
+    }
+
+    /// Credential Authentication Result
+    pub fn new_credential_authentication_result<S>(content: S, tags: &[Tag]) -> Self
+    where
+        S: Into<String>,
+    {
+        Self::new(Kind::CredentialAuthenticationResult, content, tags)
+    }
+
+    /// Service Deliverance Request
+    pub fn new_service_deliverance_request<S>(content: S, tags: &[Tag]) -> Self
+    where
+        S: Into<String>,
+    {
+        Self::new(Kind::ServiceDeliveranceRequest, content, tags)
+    }
+
+    /// Service Deliverance Result
+    pub fn new_service_deliverance_result<S>(content: S, tags: &[Tag]) -> Self
+    where
+	S: Into<String>,
+    {
+	Self::new(Kind::ServiceDeliveranceResult, content, tags)
+    }
+
     /// Long-form text note (generally referred to as "articles" or "blog posts").
     ///
     /// <https://github.com/nostr-protocol/nips/blob/master/23.md>
