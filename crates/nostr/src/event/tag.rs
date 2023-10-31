@@ -249,6 +249,8 @@ pub enum TagKind {
     Name,
     /// Credential
     Credential,
+    /// Attestation
+    Attestation,
     /// Custom tag kind
     Custom(String),
 }
@@ -284,6 +286,7 @@ impl fmt::Display for TagKind {
             Self::Lnurl => write!(f, "lnurl"),
             Self::Name => write!(f, "name"),
             Self::Credential => write!(f, "credential"),
+	    Self::Attestation => write!(f, "attestation"),
             Self::Custom(tag) => write!(f, "{tag}"),
         }
     }
@@ -324,6 +327,7 @@ where
             "lnurl" => Self::Lnurl,
             "name" => Self::Name,
 	    "credential" => Self::Credential,
+	    "attestation" => Self::Attestation,
             tag => Self::Custom(tag.to_string()),
         }
     }
@@ -381,7 +385,8 @@ pub enum Tag {
     Amount(u64),
     Lnurl(String),
     Name(String),
-    Credential(Vec<u8>),
+    Credential(String),
+    Attestation(Vec<u8>),
     PublishedAt(Timestamp),
 }
 
@@ -434,6 +439,7 @@ impl Tag {
             Tag::Amount(..) => TagKind::Amount,
             Tag::Name(..) => TagKind::Name,
 	    Tag::Credential(..) => TagKind::Credential,
+	    Tag::Attestation(..) => TagKind::Attestation,
             Tag::Lnurl(..) => TagKind::Lnurl,
         }
     }
@@ -507,7 +513,8 @@ where
                 TagKind::Amount => Ok(Self::Amount(content.parse()?)),
                 TagKind::Lnurl => Ok(Self::Lnurl(content.to_string())),
                 TagKind::Name => Ok(Self::Name(content.to_string())),
-		TagKind::Credential => Ok(Self::Credential(content.as_bytes().to_vec())),
+		TagKind::Credential => Ok(Self::Credential(content.to_string())),
+		TagKind::Attestation => Ok(Self::Attestation(content.as_bytes().to_vec())),
                 _ => Ok(Self::Generic(tag_kind, vec![content.to_string()])),
             }
         } else if tag_len == 3 {
@@ -741,9 +748,12 @@ impl From<Tag> for Vec<String> {
             Tag::Name(name) => {
                 vec![TagKind::Name.to_string(), name]
             }
-	    Tag::Credential(_) => {
+	    Tag::Credential(credential) => {
 		//TODO: implement string format, nostr sucks.
-		vec![TagKind::Credential.to_string()]
+		vec![TagKind::Credential.to_string(), credential]
+	    }
+	    Tag::Attestation(_) => {
+		vec![TagKind::Attestation.to_string()]
 	    }
             Tag::Lnurl(lnurl) => {
                 vec![TagKind::Lnurl.to_string(), lnurl]
